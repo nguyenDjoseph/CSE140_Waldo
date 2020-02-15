@@ -1,5 +1,6 @@
 # CSE140: Wheres Waldo
 #
+
 import os
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Input
 from keras.models import Model
@@ -59,6 +60,18 @@ history = model.fit_generator(
       validation_data = validation_generator,
       validation_steps = 10,  # 1000 images = batch_size * steps
       verbose = 2)
+      
+#train_loss, train_acc = mode,evaluate(data, labels)
+#test_loss, test_acc = model.evaluate(test_data, test_labels)
+acc = history.history['acc']
+val_acc = history.history['val_acc']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+      
+print("Training set accuracy:", acc, "\n")
+print("validation set accuracy:", val_acc,"\n")
+print("Training loss", loss, "\n")
+print("Validation loss", val_loss,"\n")
 #if K.image_data_format() == 'channels_first':
 #    input_shape = (3, img_width, img_height)
 #else:
