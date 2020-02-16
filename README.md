@@ -14,6 +14,4 @@ Kaggle Waldo Dataset - https://www.kaggle.com/residentmario/wheres-waldo
 
 OpenCV - https://opencv.org/
 
-pyTorch - https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html
-
 Where's Waldo Theory - http://www.randalolson.com/2015/02/03/heres-waldo-computing-the-optimal-search-strategy-for-finding-waldo/
