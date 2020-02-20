@@ -6,13 +6,20 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Input
 from keras.models import Model
 from keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import matplotlib.pyplot as plt
 
 base_dir = '.'
-train_dir = os.path.join(base_dir,'train/64/')
-validation_dir = os.path.join(base_dir, 'train/64/')
+#train_dir = os.path.join(base_dir,'train/64/train_data_64')
+#validation_dir = os.path.join(base_dir, 'train/64/valid_data_64')
 
-#train_dir = 'train/64/containswaldo/train_data'
-#validation_dir = 'train/64/containswaldo/valid_data'
+train_dir = os.path.join(base_dir,'train/128/train_data_128')
+validation_dir = os.path.join(base_dir, 'train/128/valid_data_128')
+
+#train_dir = os.path.join(base_dir,'train/256/train_data_256')
+#validation_dir = os.path.join(base_dir, 'train/256/valid_data_256')
+
+
+
 # dimensions of our images.
 img_width, img_height = 150, 150
 img_input = Input(shape=(150,150,3))
@@ -77,4 +84,18 @@ print("Validation loss", val_loss,"\n")
 #else:
 #    input_shape = (img_width, img_height, 3)
 
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Number of epochs')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Number of epochs')
+plt.legend(['train', 'test'], loc='upper right')
+plt.show()
