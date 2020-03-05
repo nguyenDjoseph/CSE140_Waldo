@@ -9,24 +9,9 @@ import sys
 import heapq
 import cv2
 
-#------------------------#
-#  simple progress bar   #
-#------------------------#
-def progress(count, total, status=''):
-    bar_len = 60
-    filled_len = int(round(bar_len * count / float(total)))
-
-    percents = round(100.0 * count / float(total), 1)
-    bar = '=' * filled_len + '-' * (bar_len - filled_len)
-
-    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
-    sys.stdout.flush()
-
 
 #-----------------------------------------------#
 #  parse argument                               #
-#  the argument contains the name of the image  #
-#  which will be analysed by the model          #
 #-----------------------------------------------#
 parser = argparse.ArgumentParser()
 parser.add_argument("name", help="Filename of the 'Find-Waldo' image. The file has to be in the same folder as main.py")
@@ -38,7 +23,7 @@ image_name=args.name
 #  creating file path and loading model  #
 #----------------------------------------#
 directory = os.path.dirname(__file__)
-filepath = os.path.join(directory, '../Saved_Models/trained_model.hdf5')
+filepath = os.path.join(directory, '../Saved_Models/trained_modelv1.hdf5')
 model = tf.keras.models.load_model(filepath)
 
 
@@ -55,8 +40,8 @@ img = Image.open(image_name)
 #---------------------------------------#
 width = img.size[0]
 height = img.size[1]
-w = int(width / 64) - 1
-h = int(height / 64) - 1
+w = int(width / 32) - 1
+h = int(height / 32) - 1
 
 print(w)
 print(h)
@@ -105,22 +90,45 @@ print(np.asarray(val[0]))
 prediction = model.predict(np.asarray(val[0]))
 print(prediction[0,0])
 '''
-#print(img2)
-for i in range(1):
-    for j in range(1):
-        cropped_img = cv_img[64*j:64*j+128, 64*i:64*i+128]
+coordinates = []
+for i in range(w):
+    for j in range(h):
+        cropped_img = cv_img[32*j:32*j+64, 32*i:32*i+64]
+        # transform to color image (gray when opencv opens it)
         cropped_img_clr = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2RGB)
         cropped_img_np = np.asarray(cropped_img_clr)
         cropped_img_naxis = cropped_img_np[np.newaxis,:,:,:]/255
+
         val.append(cropped_img_naxis)
+
+        prediction_val = model.predict(np.asarray(cropped_img_naxis))
+
+        if prediction_val[0,0] > 0.80:
+            coordinates.append([32*j,32*j+64, 32*i,32*i+64])
+            bestList.append(prediction_val[0,0])
+            result = np.concatenate((result, np.array([32 * i, 32 * j])[np.newaxis, ...]), 0)
+
+        #print(prediction_val)
         #print(cropped_img)
-        plt.imshow(cv2.cvtColor(cropped_img, cv2.COLOR_BGR2RGB))
-        plt.show()
+        #plt.imshow(cv2.cvtColor(cropped_img, cv2.COLOR_BGR2RGB))
+        #plt.show()
 
 
-#print(np.asarray(val[0]))
-prediction = model.predict(np.asarray(val[0]))
-print(prediction[0,0])
+result = result.astype(np.int32)
+result = result[1:len(result),:]
+
+toshow = np.concatenate((img2, img2, img2), 2) / 255.
+print(coordinates)
+
+for x in coordinates:
+    cv_img = cv2.rectangle(cv_img, (x[1],x[3]), (x[0],x[2]), (0,255,0), 2)
+
+#cv_img = cv2.rectangle(cv_img, (0,0), (111,111), (255,0,0), 2)
+plt.imshow(cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB))
+plt.show()
+
+
+#prediction = model.predict(np.asarray(val[0]))
 
 #----------------------------------------------#
 #  run through image by cutting out            #

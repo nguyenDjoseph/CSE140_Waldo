@@ -3,9 +3,10 @@ import os
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 import numpy as np
+import cv2
 
 directory = os.path.dirname(__file__)
-test_path = os.path.join(directory, '../train/128/valid_data_128')
+test_path = os.path.join(directory, '../data/Test')
 
 # data generator for test set
 test_datagen = ImageDataGenerator(rescale = 1./255)
@@ -13,10 +14,11 @@ test_datagen = ImageDataGenerator(rescale = 1./255)
 # generator for reading test data from folder
 test_generator = test_datagen.flow_from_directory(
     test_path,
-    target_size = (128,128),
+    target_size = (64,64),
     batch_size = 1,
     class_mode = 'binary',
     shuffle = True,
+    color_mode = 'rgb',
     classes=['notwaldo','waldo'])
 
 #Loading Model1
@@ -27,16 +29,15 @@ model=load_model(filepath)
 print(model.metrics_names)
 print(model.evaluate_generator(test_generator,steps=60))
 
-#plots 10 randomly choosen images with their ground truth and prediction
 plt.figure()
 for i in range(2):
-    for j in range(5):
+    for j in range(4):
         img = test_generator.next()
         test_x = np.array(img[0])
-        label = np.array(img[1])
-        bild = np.array(test_x[0, :, :, 0])
+        # bild = np.array(test_x[0, :, :, 0])
         prediction = model.predict(test_x)
-        plt.subplot(2, 5, i*5+j+1)
-        plt.imshow(bild, cmap='gray')
-        plt.title("Prediction %s" %(prediction))
+        plt.subplot(2, 4, i*4+j+1)
+        plt.imshow(np.array(test_x[0, :, :, 0]), cmap='gray')
+        predict_val_rounded = round(prediction[0][0], 4)
+        plt.title("Prediction " + str(predict_val_rounded))
 plt.show()
