@@ -17,13 +17,13 @@ base_dir = '.'
 #train_dir = os.path.join(base_dir,'train/128/train_data_128')
 #validation_dir = os.path.join(base_dir, 'train/128/valid_data_128')
 
-train_dir = os.path.join(base_dir,'data/Train')
-validation_dir = os.path.join(base_dir, 'data/Test')
+train_dir = os.path.join(base_dir,'datav2/Train')
+validation_dir = os.path.join(base_dir, 'datav2/Test')
 
 #train_dir = os.path.join(base_dir,'train/256/train_data_256')
 #validation_dir = os.path.join(base_dir, 'train/256/valid_data_256')
 
-model_save_path = os.path.join(base_dir, 'saved_models/trained_model.hdf5')
+model_save_path = os.path.join(base_dir, 'saved_models/trained_model_test.hdf5')
 
 # dimensions of our images.
 img_width, img_height = 150, 150
@@ -66,27 +66,27 @@ output = Dense(1, activation='sigmoid')(drpout3)
 model = Model(img_input, output)
 '''
 #MODEL v2
-mat = Conv2D(filters=64, kernel_size=(9,9), padding='same', activation='relu')(img_input)
+mat = Conv2D(filters=128, kernel_size=(9,9), padding='same', activation='relu')(img_input)
 pool = MaxPooling2D(pool_size=(5,5))(mat)
 
 dropout = Dropout(0.5)(pool)
 
-mat2 = Conv2D(filters=16, kernel_size=(6,6), padding='same', activation='relu')(dropout)
+mat2 = Conv2D(filters=128, kernel_size=(6,6), padding='same', activation='relu')(dropout)
 pool2 = MaxPooling2D(pool_size=(3,3))(mat2)
 
-drpout2 = Dropout(0.5)(pool2)
+#drpout2 = Dropout(0.5)(pool2)
 
-mat3 = Conv2D(filters=16, kernel_size=(2,2), padding='same', activation='relu')(pool2)
+mat3 = Conv2D(filters=64, kernel_size=(2,2), padding='same', activation='relu')(pool2)
 pool3 = MaxPooling2D(pool_size=(2,2))(mat3)
 
-drpout3 = Dropout(0.25)(pool3)
+#drpout3 = Dropout(0.5)(pool3)
 
-#mat4 = Conv2D(filters=8, kernel_size=(3,3), activation='relu')(drpout3)
+#mat4 = Conv2D(filters=8, kernel_size=(2,2), padding='same', activation='relu')(drpout3)
 #pool4 = MaxPooling2D(pool_size=(2,2))(mat4)
 
-#drpout4 = Dropout(0.5)(pool4)
+#drpout4 = Dropout(0.25)(pool4)
 
-tens1d = Flatten()(drpout3)
+tens1d = Flatten()(pool3)
 
 x1 = Dense(64, activation='relu')(tens1d)
 output = Dense(1, activation='sigmoid')(x1)
@@ -118,8 +118,8 @@ end_training = ModelCheckpoint(model_save_path, monitor='acc', verbose=1, save_b
 
 history = model.fit_generator(
       train_generator,
-      steps_per_epoch = 10,  # 2000 images = batch_size * steps
-      epochs = 100,
+      steps_per_epoch = 15,  # 2000 images = batch_size * steps
+      epochs = 250,
       validation_data = validation_generator,
       validation_steps = 10,  # 1000 images = batch_size * steps
       verbose = 2,
