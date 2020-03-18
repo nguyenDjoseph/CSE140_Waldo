@@ -24,24 +24,17 @@ img = Image.open(image_name)
 #img6.jpg works forsure
 #img3.jpg
 
-width = img.size[0]
-height = img.size[1]
-w = int(width / 32) - 1
-h = int(height / 32) - 1
+
+w = int(img.size[0] / 32) - 1
+h = int(img.size[1] / 32) - 1
 
 print(w)
 print(h)
 
-
-count_waldo = 0
 bestList = []
 result = np.zeros((1, 2))
-total=w*h
 
-#img2 = np.mean(np.asarray(img), axis=2, keepdims=True)
-#img3 = img2[np.newaxis, :, :, :] / 255
 img2 = np.asarray(img)
-img3 = img2[np.newaxis, :, :, :] / 255
 
 cv_img = cv2.imread(image_name, cv2.COLOR_BGR2RGB)
 val = []
@@ -59,10 +52,10 @@ for i in range(w):
 
         prediction_val = model.predict(np.asarray(cropped_img_naxis))
         
-        plt.imshow(cropped_img_clr)
-        plt.show()
+        #plt.imshow(cropped_img_clr)
+        #plt.show()
 
-        if prediction_val[0,0] > 0.82:
+        if prediction_val[0,0] > 0.95:
             coordinates.append([32*j,32*j+64, 32*i,32*i+64])
             bestList.append(prediction_val[0,0])
             result = np.concatenate((result, np.array([32 * i, 32 * j])[np.newaxis, ...]), 0)
@@ -79,6 +72,3 @@ for x in coordinates:
 #cv_img = cv2.rectangle(cv_img, (0,0), (111,111), (255,0,0), 2)
 plt.imshow(cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB))
 plt.show()
-
-
-#prediction = model.predict(np.asarray(val[0]))

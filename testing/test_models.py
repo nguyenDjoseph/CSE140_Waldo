@@ -8,10 +8,8 @@ import cv2
 directory = os.path.dirname(__file__)
 test_path = os.path.join(directory, '../data/Test')
 
-# data generator for test set
 test_datagen = ImageDataGenerator(rescale = 1./255)
 
-# generator for reading test data from folder
 test_generator = test_datagen.flow_from_directory(
     test_path,
     target_size = (64,64),
@@ -21,11 +19,9 @@ test_generator = test_datagen.flow_from_directory(
     color_mode = 'rgb',
     classes=['notwaldo','waldo'])
 
-#Loading Model1
 filepath = os.path.join(directory, '../saved_models/trained_model.hdf5')
 model=load_model(filepath)
 
-#evaluate loss and accuracy on 60 randomly choosen test-images from a total of 215 test-images
 print(model.metrics_names)
 print(model.evaluate_generator(test_generator,steps=60))
 

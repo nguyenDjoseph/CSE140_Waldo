@@ -23,7 +23,7 @@ validation_dir = os.path.join(base_dir, 'datav2/Test')
 #train_dir = os.path.join(base_dir,'train/256/train_data_256')
 #validation_dir = os.path.join(base_dir, 'train/256/valid_data_256')
 
-model_save_path = os.path.join(base_dir, 'saved_models/trained_model_test.hdf5')
+model_save_path = os.path.join(base_dir, 'saved_models/trained_model_testv1.hdf5')
 
 # dimensions of our images.
 img_width, img_height = 150, 150
@@ -95,7 +95,7 @@ model = Model(img_input, output)
 
 model.summary()
 
-model.compile(loss = 'binary_crossentropy', optimizer=Adam(), metrics=['acc'])
+model.compile(loss = 'binary_crossentropy', optimizer=RMSprop(learning_rate=0.001), metrics=['acc'])
 
 train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
