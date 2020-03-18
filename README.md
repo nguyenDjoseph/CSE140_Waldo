@@ -23,6 +23,7 @@ In this project, we have 2 models in saved_models:
 trained_model.hdf5 is our first iteration of the model (the code is located in app.py)
 trained_modelv1.hdft is our second iteration (final model) (the code is located in app.py)
 
+To use a different model during the predictor step, update line 17 in predictor/main.py
 
 ## Project Usage
 
@@ -41,3 +42,7 @@ To use our predictor and detection algorithm, in the predictor directory run:
 `python3 main.py {image-name}`
 
 We have 3 images for anyone to test our given model.
+
+Example predictor command:
+
+`python3 main.py test1.jpg`

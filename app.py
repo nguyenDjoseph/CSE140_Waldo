@@ -20,6 +20,7 @@ model_save_path = os.path.join(base_dir, 'saved_models/trained_model_testv1.hdf5
 img_width, img_height = 150, 150
 img_input = Input(shape=(64,64,3))
 '''
+# MODEL v1
 mat = Conv2D(filters=64, kernel_size=(5,5), padding='valid', activation='relu')(img_input)
 #mat2 = Conv2D(filters=8, kernel_size=(3,3), padding='valid', activation='relu')(mat)
 pool = MaxPooling2D(pool_size=(2,2))(mat)
@@ -53,19 +54,20 @@ drpout3 = Dropout(0.10)(x1)
 output = Dense(1, activation='sigmoid')(drpout3)
 
 model = Model(img_input, output)
+
 '''
 #MODEL v2
-mat = Conv2D(filters=128, kernel_size=(9,9), padding='same', activation='relu')(img_input)
+mat = Conv2D(filters=32, kernel_size=(9,9), padding='same', activation='relu')(img_input)
 pool = MaxPooling2D(pool_size=(5,5))(mat)
 
 dropout = Dropout(0.5)(pool)
 
-mat2 = Conv2D(filters=128, kernel_size=(6,6), padding='same', activation='relu')(dropout)
+mat2 = Conv2D(filters=16, kernel_size=(6,6), padding='same', activation='relu')(dropout)
 pool2 = MaxPooling2D(pool_size=(3,3))(mat2)
 
 #drpout2 = Dropout(0.5)(pool2)
 
-mat3 = Conv2D(filters=64, kernel_size=(2,2), padding='same', activation='relu')(pool2)
+mat3 = Conv2D(filters=8, kernel_size=(2,2), padding='same', activation='relu')(pool2)
 pool3 = MaxPooling2D(pool_size=(2,2))(mat3)
 
 tens1d = Flatten()(pool3)
@@ -101,7 +103,7 @@ end_training = ModelCheckpoint(model_save_path, monitor='acc', verbose=1, save_b
 history = model.fit_generator(
       train_generator,
       steps_per_epoch = 15,  # 2000 images = batch_size * steps
-      epochs = 250,
+      epochs = 100,
       validation_data = validation_generator,
       validation_steps = 10,  # 1000 images = batch_size * steps
       verbose = 2,
