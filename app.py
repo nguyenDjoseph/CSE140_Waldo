@@ -11,25 +11,14 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 
 base_dir = '.'
-#train_dir = os.path.join(base_dir,'train/64/train_data_64')
-#validation_dir = os.path.join(base_dir, 'train/64/valid_data_64')
-
-#train_dir = os.path.join(base_dir,'train/128/train_data_128')
-#validation_dir = os.path.join(base_dir, 'train/128/valid_data_128')
 
 train_dir = os.path.join(base_dir,'datav2/Train')
 validation_dir = os.path.join(base_dir, 'datav2/Test')
 
-#train_dir = os.path.join(base_dir,'train/256/train_data_256')
-#validation_dir = os.path.join(base_dir, 'train/256/valid_data_256')
-
 model_save_path = os.path.join(base_dir, 'saved_models/trained_model_testv1.hdf5')
 
-# dimensions of our images.
 img_width, img_height = 150, 150
-# rgb image (dim 3)
 img_input = Input(shape=(64,64,3))
-# MODEL v1
 '''
 mat = Conv2D(filters=64, kernel_size=(5,5), padding='valid', activation='relu')(img_input)
 #mat2 = Conv2D(filters=8, kernel_size=(3,3), padding='valid', activation='relu')(mat)
@@ -79,13 +68,6 @@ pool2 = MaxPooling2D(pool_size=(3,3))(mat2)
 mat3 = Conv2D(filters=64, kernel_size=(2,2), padding='same', activation='relu')(pool2)
 pool3 = MaxPooling2D(pool_size=(2,2))(mat3)
 
-#drpout3 = Dropout(0.5)(pool3)
-
-#mat4 = Conv2D(filters=8, kernel_size=(2,2), padding='same', activation='relu')(drpout3)
-#pool4 = MaxPooling2D(pool_size=(2,2))(mat4)
-
-#drpout4 = Dropout(0.25)(pool4)
-
 tens1d = Flatten()(pool3)
 
 x1 = Dense(64, activation='relu')(tens1d)
@@ -127,8 +109,6 @@ history = model.fit_generator(
 
 # end of training related
 
-#train_loss, train_acc = mode,evaluate(data, labels)
-#test_loss, test_acc = model.evaluate(test_data, test_labels)
 acc = history.history['acc']
 val_acc = history.history['val_acc']
 loss = history.history['loss']
@@ -138,10 +118,6 @@ print("Training set accuracy:", acc, "\n")
 print("validation set accuracy:", val_acc,"\n")
 print("Training loss", loss, "\n")
 print("Validation loss", val_loss,"\n")
-#if K.image_data_format() == 'channels_first':
-#    input_shape = (3, img_width, img_height)
-#else:
-#    input_shape = (img_width, img_height, 3)
 
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])

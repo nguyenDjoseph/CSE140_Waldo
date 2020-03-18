@@ -30,7 +30,6 @@ for i in range(2):
     for j in range(4):
         img = test_generator.next()
         test_x = np.array(img[0])
-        # bild = np.array(test_x[0, :, :, 0])
         prediction = model.predict(test_x)
         plt.subplot(2, 4, i*4+j+1)
         plt.imshow(np.array(test_x[0, :, :, 0]), cmap='gray')
